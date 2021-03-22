@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import DriversTable from "./drivers-table/DriversTable";
-import "./App.css";
-import TasksTable from "./tasks-table/TasksTable";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import DriversTable from './drivers-table/DriversTable';
+import './App.css';
+import TasksTable from './tasks-table/TasksTable';
 
 const App = () => {
   const [tasks, setTasks] = useState([]);
@@ -11,29 +11,36 @@ const App = () => {
   const [selectedTask, setSelectedTask] = useState(null);
 
   useEffect(() => {
-    axios.get("/api/drivers").then((res) => {
+    axios.get('/api/drivers').then(res => {
       setDrivers(res.data);
     });
-    axios.get("/api/tasks").then((res) => {
+    axios.get('/api/tasks').then(res => {
       setTasks(res.data);
     });
   }, []);
 
   useEffect(() => {
     if ((selectedDriver, selectedTask)) {
-      // TODO: save to server connection
+      axios
+        .post('/api/tasks', {
+          driverId: selectedDriver,
+          taskId: selectedDriver,
+        })
+        .then(res => {
+          setTasks(res.data);
+        });
       setSelectedTask(null);
       setSelectedDriver(null);
     }
   }, [selectedDriver, selectedTask]);
 
-  const getDriverName = (driverId) => {
-    const foundDriver = drivers.find((driver) => driver.id === driverId);
-    return foundDriver ? foundDriver.name : "Unknown Driver";
+  const getDriverName = driverId => {
+    const foundDriver = drivers.find(driver => driver.id === driverId);
+    return foundDriver ? foundDriver.name : 'Unknown Driver';
   };
 
   return (
-    <div className="app">
+    <div className='app'>
       <DriversTable
         drivers={drivers}
         isSelectMode={selectedTask && !selectedDriver}

@@ -7,13 +7,13 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-} from "@material-ui/core";
-import React, { useState } from "react";
-import AddButton from "../../common/AddButton";
-import DriverRow from "./DriverRow";
-import AddIcon from "@material-ui/icons/Add";
+} from '@material-ui/core';
+import React, { useState } from 'react';
+import AddButton from '../../common/AddButton';
+import DriverRow from './DriverRow';
+import AddIcon from '@material-ui/icons/Add';
 
-const columns = [{ label: "Name" }, { label: "ID" }];
+const columns = [{ label: 'Name' }, { label: 'ID' }];
 
 const DriversTable = ({ drivers, isSelectMode, setSelectedDriver }) => {
   return (
@@ -21,21 +21,21 @@ const DriversTable = ({ drivers, isSelectMode, setSelectedDriver }) => {
       <Table stickyHeader>
         <TableHead>
           <TableRow>
-            {columns.map((column) => (
+            {columns.map(column => (
               <TableCell key={column.label}>{column.label}</TableCell>
             ))}
-            <TableCell padding="checkbox">Select Driver</TableCell>
+            <TableCell padding='checkbox'>Select Driver</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {drivers.map((driver) => (
+          {drivers.map(driver => (
             <DriverRow key={driver.id} driver={driver}>
               {isSelectMode ? (
                 <AddButton onAdd={() => setSelectedDriver(driver.id)} />
               ) : (
                 <Button
-                  variant="contained"
-                  color="primary"
+                  variant='contained'
+                  color='primary'
                   startIcon={<AddIcon />}
                   onClick={() => setSelectedDriver(driver.id)}
                 >

@@ -1,5 +1,5 @@
-import { TableCell, TableRow } from "@material-ui/core";
-import React, { useMemo } from "react";
+import { TableCell, TableRow } from '@material-ui/core';
+import React, { useMemo } from 'react';
 
 // const MyComponent = React.memo(function MyComponent(props) {
 //   /* render using props */

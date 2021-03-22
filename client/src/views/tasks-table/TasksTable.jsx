@@ -6,21 +6,21 @@ import {
   TableHead,
   TableRow,
   Paper,
-} from "@material-ui/core";
-import React, { useMemo } from "react";
-import AddButton from "../../common/AddButton";
-import AssingmentRow from "./TaskRow";
+} from '@material-ui/core';
+import React, { useMemo } from 'react';
+import AddButton from '../../common/AddButton';
+import AssingmentRow from './TaskRow';
 
 const columns = [
-  { label: "Driver" },
-  { label: "Task ID" },
-  { label: "Day 1" },
-  { label: "Day 2" },
-  { label: "Day 3" },
-  { label: "Day 4" },
-  { label: "Day 5" },
-  { label: "Day 6" },
-  { label: "Day 7" },
+  { label: 'Driver' },
+  { label: 'Task ID' },
+  { label: 'Day 1' },
+  { label: 'Day 2' },
+  { label: 'Day 3' },
+  { label: 'Day 4' },
+  { label: 'Day 5' },
+  { label: 'Day 6' },
+  { label: 'Day 7' },
 ];
 
 const TasksTable = ({
@@ -34,13 +34,13 @@ const TasksTable = ({
       <Table stickyHeader>
         <TableHead>
           <TableRow>
-            {columns.map((column) => (
+            {columns.map(column => (
               <TableCell key={column.label}>{column.label}</TableCell>
             ))}
           </TableRow>
         </TableHead>
         <TableBody>
-          {tasks.map((assingment) => (
+          {tasks.map(assingment => (
             <AssingmentRow
               key={assingment.lineId}
               assingment={assingment}
