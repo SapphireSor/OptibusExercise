@@ -1,0 +1,13 @@
+.app {
+  display: grid;
+  grid-template-columns: 30vw auto;
+  justify-items: center;
+  height: 100vh;
+  background-color: #469894;
+}
+
+.app > * {
+  max-width: 95%;
+  align-self: center;
+  height: 95vh;
+}
