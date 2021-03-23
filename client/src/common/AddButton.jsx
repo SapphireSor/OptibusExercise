@@ -1,12 +1,12 @@
 import React from 'react';
-import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
-import { IconButton } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
+import { Button } from '@material-ui/core';
 
-const AddButton = ({ onAdd }) => {
+const AddButton = ({ onClick, buttonText }) => {
   return (
-    <IconButton aria-label='add' onClick={onAdd} size={24}>
-      <AddCircleOutlineIcon fontSize='inherit' />
-    </IconButton>
+    <Button size='small' onClick={onClick}>
+      <AddIcon size='small' /> <span>{buttonText}</span>
+    </Button>
   );
 };
 

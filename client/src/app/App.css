@@ -1,0 +1,19 @@
+.app {
+  height: 100vh;
+  background-color: #2b2e4a;
+  position: relative;
+}
+
+.gridDisplay {
+  display: grid;
+  grid-template-columns: 30vw auto;
+  grid-column-gap: 60px;
+  justify-items: center;
+}
+
+.loader {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
