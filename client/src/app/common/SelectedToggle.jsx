@@ -6,11 +6,11 @@ import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
 const useStyles = makeStyles({
   checkIcon: {
     color: 'green',
-    fontSize: 20,
+    fontSize: 24,
   },
   removeIcon: {
     color: 'red',
-    fontSize: 20,
+    fontSize: 24,
   },
 });
 

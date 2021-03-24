@@ -1,27 +1,42 @@
 import React from 'react';
 import {
+  makeStyles,
   Paper,
   Table,
   TableBody,
-  TableCell,
-  TableContainer,
   TableHead,
   TableRow,
 } from '@material-ui/core';
 import DriverRow from './DriverRow';
-import RowActions from '../../common/RowActions';
+import RowActions from '../common/RowActions';
+import {
+  StyledTableContainer,
+  StyledTableHeaderCell,
+} from '../../styled-components/StyledTable';
 
-const columns = [{ label: 'Name' }, { label: 'ID' }, { label: 'Actions' }];
+const useStyles = makeStyles({
+  actionCell: {
+    width: 60,
+  },
+});
+
+const columns = [{ label: 'Name' }, { label: 'ID' }];
 
 const DriversTable = ({ data, selectedId, onSelect, isTaskSelected }) => {
+  const classes = useStyles();
   return (
-    <TableContainer component={Paper}>
+    <StyledTableContainer component={Paper}>
       <Table stickyHeader>
         <TableHead>
           <TableRow>
             {columns.map(column => (
-              <TableCell key={column.label}>{column.label}</TableCell>
+              <StyledTableHeaderCell key={column.label}>
+                {column.label}
+              </StyledTableHeaderCell>
             ))}
+            <StyledTableHeaderCell className={classes.actionCell}>
+              Actions
+            </StyledTableHeaderCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -42,7 +57,7 @@ const DriversTable = ({ data, selectedId, onSelect, isTaskSelected }) => {
           ))}
         </TableBody>
       </Table>
-    </TableContainer>
+    </StyledTableContainer>
   );
 };
 

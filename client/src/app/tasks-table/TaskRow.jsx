@@ -1,26 +1,72 @@
 import React from 'react';
-import { makeStyles, TableCell, TableRow } from '@material-ui/core';
+import { Grid, IconButton, makeStyles, TableRow } from '@material-ui/core';
+import { StyledTableHeaderCell } from '../../styled-components/StyledTable';
+import RemoveIcon from '@material-ui/icons/Remove';
 
 const useStyles = makeStyles({
-  selectedRow: { backgroundColor: '#252a34' },
-  cell: {
-    color: '#fff',
-    fontWeight: 'bold',
+  tableCellRoot: {
+    textAlign: 'center',
+  },
+  rowRoot: {
+    height: 55,
+  },
+  removeIcon: {
+    maxWidth: '30%',
+    color: 'red',
+  },
+  driverName: {
+    paddingLeft: '2px',
+    maxWidth: '70%',
   },
 });
 
-const TaskRow = ({ task, isSelected, children }) => {
+const TaskRow = ({
+  task,
+  isSelected,
+  removeDriverFromTask,
+  getDriverName,
+  children,
+}) => {
   const classes = useStyles();
+
+  // Display the driver name with a remove action
+  const driverNameDisplay = () => (
+    <StyledTableHeaderCell>
+      <Grid container direction='row' alignItems='center'>
+        <IconButton
+          className={classes.removeIcon}
+          onClick={() => removeDriverFromTask(task.lineId)}
+          size='small'
+        >
+          <RemoveIcon fontSize='inherit' />
+        </IconButton>
+        <div className={classes.driverName}>
+          {' '}
+          {getDriverName(task.driverId)}
+        </div>
+      </Grid>
+    </StyledTableHeaderCell>
+  );
+
   return (
-    <TableRow className={isSelected && classes.selectedRow}>
-      <TableCell padding='none'>{children}</TableCell>
-      <TableCell className={isSelected && classes.cell}>
-        {task.lineDisplayId}
-      </TableCell>
+    <TableRow selected={isSelected} classes={{ root: classes.rowRoot }}>
+      {task.driverId ? (
+        driverNameDisplay()
+      ) : (
+        <StyledTableHeaderCell
+          padding='none'
+          classes={{
+            root: classes.tableCellRoot,
+          }}
+        >
+          {children}
+        </StyledTableHeaderCell>
+      )}
+      <StyledTableHeaderCell>{task.lineDisplayId}</StyledTableHeaderCell>
       {task.tasks.map(dayTask => (
-        <TableCell key={dayTask.taskID} className={isSelected && classes.cell}>
+        <StyledTableHeaderCell key={dayTask.taskID}>
           {dayTask.type}
-        </TableCell>
+        </StyledTableHeaderCell>
       ))}
     </TableRow>
   );

@@ -2,28 +2,25 @@ import React from 'react';
 import {
   Table,
   TableBody,
-  TableCell,
-  TableContainer,
   TableHead,
   TableRow,
   Paper,
   makeStyles,
-  IconButton,
 } from '@material-ui/core';
+import {
+  StyledTableContainer,
+  StyledTableHeaderCell,
+} from '../../styled-components/StyledTable';
 import TaskRow from './TaskRow';
-import AddButton from '../../common/AddButton';
-import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
-import SelectedToggle from '../../common/SelectedToggle';
-import RowActions from '../../common/RowActions';
+import RowActions from '../common/RowActions';
 
 const useStyles = makeStyles({
-  removeIcon: {
-    color: 'red',
+  actionCell: {
+    width: 110,
   },
 });
 
 const columns = [
-  { label: 'Driver' },
   { label: 'Task ID' },
   { label: 'Day 1' },
   { label: 'Day 2' },
@@ -36,33 +33,26 @@ const columns = [
 
 const TasksTable = ({
   data,
-  selectedId: selectedTaskId,
+  selectedId,
   onSelect,
   isDriverSelected,
   getDriverName,
   removeDriverFromTask,
 }) => {
   const classes = useStyles();
-  const driverNameDisplay = task => (
-    <div>
-      <IconButton
-        className={classes.removeIcon}
-        onClick={() => removeDriverFromTask(task.lineId)}
-        size='small'
-      >
-        <RemoveCircleOutlineIcon fontSize='inherit' />
-      </IconButton>
-      <span> {getDriverName(task.driverId)}</span>
-    </div>
-  );
 
   return (
-    <TableContainer component={Paper}>
+    <StyledTableContainer component={Paper}>
       <Table stickyHeader>
         <TableHead>
           <TableRow>
+            <StyledTableHeaderCell className={classes.actionCell}>
+              Driver
+            </StyledTableHeaderCell>
             {columns.map(column => (
-              <TableCell key={column.label}>{column.label}</TableCell>
+              <StyledTableHeaderCell key={column.label}>
+                {column.label}
+              </StyledTableHeaderCell>
             ))}
           </TableRow>
         </TableHead>
@@ -71,24 +61,22 @@ const TasksTable = ({
             <TaskRow
               key={task.lineId}
               task={task}
-              isSelected={selectedTaskId === task.lineId && !isDriverSelected}
+              isSelected={selectedId === task.lineId && !isDriverSelected}
+              getDriverName={getDriverName}
+              removeDriverFromTask={removeDriverFromTask}
             >
-              {task.driverId ? (
-                driverNameDisplay(task)
-              ) : (
-                <RowActions
-                  isRowSelected={selectedTaskId === task.lineId}
-                  isActionAvailable={!selectedTaskId}
-                  buttonText={isDriverSelected ? 'Pair' : 'Driver'}
-                  onSelect={() => onSelect(task.lineId)}
-                  onDeselect={() => onSelect(null)}
-                />
-              )}
+              <RowActions
+                isRowSelected={selectedId === task.lineId}
+                isActionAvailable={!selectedId}
+                buttonText={isDriverSelected ? 'Pair' : 'Driver'}
+                onSelect={() => onSelect(task.lineId)}
+                onDeselect={() => onSelect(null)}
+              />
             </TaskRow>
           ))}
         </TableBody>
       </Table>
-    </TableContainer>
+    </StyledTableContainer>
   );
 };
 

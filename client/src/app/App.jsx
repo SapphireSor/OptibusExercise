@@ -10,11 +10,20 @@ import {
 } from '../managers/tasksClientManager';
 import './App.css';
 
+export const selectionTypeEnum = {
+  notDefined: 0,
+  driverToTask: 1,
+  taskToDriver: 2,
+};
+
 const App = () => {
   const [drivers, setDrivers] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [displayTasks, setDisplayTasks] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectionType, setSelectionType] = useState(
+    selectionTypeEnum.notDefined
+  );
   const [selectedRows, setSelectedRows] = useState({
     driverId: null,
     taskId: null,
@@ -31,9 +40,25 @@ const App = () => {
     );
   }, []);
 
-  // Assign driver to task
+  // Change selection type
+  // If both selected assign driver to task
   useEffect(() => {
+    // set to notDefined selection type
+    if (!selectedRows.driverId && !selectedRows.taskId) {
+      setSelectionType(selectionTypeEnum.notDefined);
+    }
+
+    // set to driverToTask selection type
+    if (selectedRows.driverId && !selectedRows.taskId) {
+      setSelectionType(selectionTypeEnum.driverToTask);
+    }
+    // set to taskToDriver selection type
+    if (selectedRows.taskId && !selectedRows.driverId) {
+      setSelectionType(selectionTypeEnum.taskToDriver);
+    }
+    // Assign driver to task
     if (selectedRows.driverId && selectedRows.taskId) {
+      setSelectionType(selectionTypeEnum.notDefined);
       assignDriver(selectedRows.driverId, selectedRows.taskId).then(() => {
         setAllTaskData(
           tasks.map(prevTask =>
@@ -63,7 +88,6 @@ const App = () => {
         })
       );
     });
-    // setDisplayTasks()
   };
 
   // Set tasks and display tasks
@@ -106,13 +130,13 @@ const App = () => {
         data={drivers}
         selectedId={selectedRows.driverId}
         onSelect={onDriverSelect}
-        isTaskSelected={!!selectedRows.taskId}
+        selectionType={selectionType}
       />
       <TasksTable
         data={displayTasks}
         selectedId={selectedRows.taskId}
-        isDriverSelected={!!selectedRows.driverId}
         onSelect={onTaskSelect}
+        selectionType={selectionType}
         getDriverName={getDriverName}
         removeDriverFromTask={removeDriverFromTask}
       />

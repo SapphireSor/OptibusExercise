@@ -1,23 +1,30 @@
-import { makeStyles, TableCell, TableRow } from '@material-ui/core';
 import React from 'react';
+import { makeStyles, TableRow } from '@material-ui/core';
+import { StyledTableHeaderCell } from '../../styled-components/StyledTable';
 
 const useStyles = makeStyles({
-  selectedRow: { backgroundColor: '#252a34' },
-  cell: {
-    color: '#fff',
-    fontWeight: 'bold',
+  tableCellRoot: {
+    textAlign: 'center',
+  },
+  rowRoot: {
+    height: 55,
   },
 });
 
 const DriverRow = ({ driver, isSelected, children }) => {
   const classes = useStyles();
   return (
-    <TableRow className={isSelected && classes.selectedRow}>
-      <TableCell className={isSelected && classes.cell}>
-        {driver.name}
-      </TableCell>
-      <TableCell className={isSelected && classes.cell}>{driver.id}</TableCell>
-      <TableCell padding='none'>{children}</TableCell>
+    <TableRow selected={isSelected} classes={{ root: classes.rowRoot }}>
+      <StyledTableHeaderCell>{driver.name}</StyledTableHeaderCell>
+      <StyledTableHeaderCell>{driver.id}</StyledTableHeaderCell>
+      <StyledTableHeaderCell
+        padding='none'
+        classes={{
+          root: classes.tableCellRoot,
+        }}
+      >
+        {children}
+      </StyledTableHeaderCell>
     </TableRow>
   );
 };

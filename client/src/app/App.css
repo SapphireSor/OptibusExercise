@@ -1,14 +1,14 @@
 .app {
   height: 100vh;
-  background-color: #2b2e4a;
+  background-color: #222831;
   position: relative;
 }
 
 .gridDisplay {
   display: grid;
-  grid-template-columns: 30vw auto;
-  grid-column-gap: 60px;
+  grid-template-columns: 35vw auto;
   justify-items: center;
+  align-items: center;
 }
 
 .loader {
