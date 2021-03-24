@@ -7,12 +7,13 @@ import {
   TableHead,
   TableRow,
 } from '@material-ui/core';
-import DriverRow from './DriverRow';
-import RowActions from '../common/RowActions';
+import DriverRow from './driver-row/DriverRow';
 import {
   StyledTableContainer,
-  StyledTableHeaderCell,
+  StyledTableCell,
 } from '../../styled-components/StyledTable';
+import { selectionModeEnum } from '../App';
+import RowActions from '../../common/RowActions';
 
 const useStyles = makeStyles({
   actionCell: {
@@ -22,34 +23,33 @@ const useStyles = makeStyles({
 
 const columns = [{ label: 'Name' }, { label: 'ID' }];
 
-const DriversTable = ({ data, selectedId, onSelect, isTaskSelected }) => {
+const DriversTable = ({ data, selectedId, onSelect, selectionMode }) => {
   const classes = useStyles();
+  const buttonText =
+    selectionMode === selectionModeEnum.noneChosen ? 'Task' : 'Pair';
+
   return (
     <StyledTableContainer component={Paper}>
       <Table stickyHeader>
         <TableHead>
           <TableRow>
             {columns.map(column => (
-              <StyledTableHeaderCell key={column.label}>
+              <StyledTableCell key={column.label}>
                 {column.label}
-              </StyledTableHeaderCell>
+              </StyledTableCell>
             ))}
-            <StyledTableHeaderCell className={classes.actionCell}>
+            <StyledTableCell className={classes.actionCell}>
               Actions
-            </StyledTableHeaderCell>
+            </StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {data.map(driver => (
-            <DriverRow
-              key={driver.id}
-              driver={driver}
-              isSelected={selectedId === driver.id && !isTaskSelected}
-            >
+            <DriverRow key={driver.id} driver={driver}>
               <RowActions
-                isRowSelected={selectedId === driver.id}
-                isActionAvailable={!selectedId}
-                buttonText={isTaskSelected ? 'Pair' : 'Task'}
+                tableChosen={selectionMode === selectionModeEnum.driverChosen}
+                buttonText={buttonText}
+                isSelected={selectedId === driver.id}
                 onSelect={() => onSelect(driver.id)}
                 onDeselect={() => onSelect(null)}
               />

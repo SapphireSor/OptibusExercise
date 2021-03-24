@@ -10,10 +10,10 @@ import {
 } from '../managers/tasksClientManager';
 import './App.css';
 
-export const selectionTypeEnum = {
-  notDefined: 0,
-  driverToTask: 1,
-  taskToDriver: 2,
+export const selectionModeEnum = {
+  noneChosen: 0,
+  taskChosen: 1,
+  driverChosen: 2,
 };
 
 const App = () => {
@@ -21,8 +21,8 @@ const App = () => {
   const [tasks, setTasks] = useState([]);
   const [displayTasks, setDisplayTasks] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectionType, setSelectionType] = useState(
-    selectionTypeEnum.notDefined
+  const [selectionMode, setSelectionMode] = useState(
+    selectionModeEnum.noneChosen
   );
   const [selectedRows, setSelectedRows] = useState({
     driverId: null,
@@ -40,41 +40,50 @@ const App = () => {
     );
   }, []);
 
-  // Change selection type
+  // Change selection mode
   // If both selected assign driver to task
   useEffect(() => {
-    // set to notDefined selection type
+    // set to notDefined selection mode
     if (!selectedRows.driverId && !selectedRows.taskId) {
-      setSelectionType(selectionTypeEnum.notDefined);
+      setSelectionMode(selectionModeEnum.noneChosen);
     }
 
-    // set to driverToTask selection type
+    // set to driverChosen selection mode
     if (selectedRows.driverId && !selectedRows.taskId) {
-      setSelectionType(selectionTypeEnum.driverToTask);
+      setSelectionMode(selectionModeEnum.driverChosen);
     }
-    // set to taskToDriver selection type
+    // set to taskChosen selection mode
     if (selectedRows.taskId && !selectedRows.driverId) {
-      setSelectionType(selectionTypeEnum.taskToDriver);
+      setSelectionMode(selectionModeEnum.taskChosen);
     }
     // Assign driver to task
     if (selectedRows.driverId && selectedRows.taskId) {
-      setSelectionType(selectionTypeEnum.notDefined);
       assignDriver(selectedRows.driverId, selectedRows.taskId).then(() => {
-        setAllTaskData(
-          tasks.map(prevTask =>
+        setAllTaskData(prevTasks =>
+          prevTasks.map(prevTask =>
             prevTask.lineId === selectedRows.taskId
               ? { ...prevTask, driverId: selectedRows.driverId }
               : prevTask
           )
         );
-      });
 
-      setSelectedRows({
-        driverId: null,
-        taskId: null,
+        // If selection mode is driver chosen then can keep  pair mode
+        // Else reset the selection mode
+        if (selectionModeEnum.driverChosen !== selectionMode) {
+          setSelectionMode(selectionModeEnum.noneChosen);
+          setSelectedRows({
+            driverId: null,
+            taskId: null,
+          });
+        } else {
+          setSelectedRows(prevSelected => ({
+            ...prevSelected,
+            taskId: null,
+          }));
+        }
       });
     }
-  }, [selectedRows]);
+  }, [selectedRows, selectionMode]);
 
   // Remove Driver assigned to a task by task id
   const removeDriverFromTask = taskId => {
@@ -105,7 +114,7 @@ const App = () => {
   // Set driver id as selected, if driver id null deselect driver
   const onDriverSelect = driverId => {
     setSelectedRows(prevSelected => ({ ...prevSelected, driverId }));
-    if (!!driverId) {
+    if (!!driverId && selectionModeEnum.taskChosen !== selectionMode) {
       // Filter out tasks assigned to another driver
       setDisplayTasks(
         tasks.filter(task => !task.driverId || task.driverId === driverId)
@@ -130,13 +139,13 @@ const App = () => {
         data={drivers}
         selectedId={selectedRows.driverId}
         onSelect={onDriverSelect}
-        selectionType={selectionType}
+        selectionMode={selectionMode}
       />
       <TasksTable
         data={displayTasks}
         selectedId={selectedRows.taskId}
         onSelect={onTaskSelect}
-        selectionType={selectionType}
+        selectionMode={selectionMode}
         getDriverName={getDriverName}
         removeDriverFromTask={removeDriverFromTask}
       />

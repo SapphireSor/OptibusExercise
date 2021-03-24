@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid, IconButton, makeStyles, TableRow } from '@material-ui/core';
-import { StyledTableHeaderCell } from '../../styled-components/StyledTable';
-import RemoveIcon from '@material-ui/icons/Remove';
+import { StyledTableCell } from '../../../styled-components/StyledTable';
+import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 
 const useStyles = makeStyles({
   tableCellRoot: {
@@ -20,53 +20,45 @@ const useStyles = makeStyles({
   },
 });
 
-const TaskRow = ({
-  task,
-  isSelected,
-  removeDriverFromTask,
-  getDriverName,
-  children,
-}) => {
+const TaskRow = ({ task, removeDriverFromTask, getDriverName, children }) => {
   const classes = useStyles();
 
   // Display the driver name with a remove action
   const driverNameDisplay = () => (
-    <StyledTableHeaderCell>
+    <StyledTableCell>
       <Grid container direction='row' alignItems='center'>
         <IconButton
           className={classes.removeIcon}
           onClick={() => removeDriverFromTask(task.lineId)}
           size='small'
         >
-          <RemoveIcon fontSize='inherit' />
+          <HighlightOffIcon fontSize='inherit' />
         </IconButton>
         <div className={classes.driverName}>
           {' '}
           {getDriverName(task.driverId)}
         </div>
       </Grid>
-    </StyledTableHeaderCell>
+    </StyledTableCell>
   );
 
   return (
-    <TableRow selected={isSelected} classes={{ root: classes.rowRoot }}>
+    <TableRow classes={{ root: classes.rowRoot }}>
       {task.driverId ? (
         driverNameDisplay()
       ) : (
-        <StyledTableHeaderCell
+        <StyledTableCell
           padding='none'
           classes={{
             root: classes.tableCellRoot,
           }}
         >
           {children}
-        </StyledTableHeaderCell>
+        </StyledTableCell>
       )}
-      <StyledTableHeaderCell>{task.lineDisplayId}</StyledTableHeaderCell>
+      <StyledTableCell>{task.lineDisplayId}</StyledTableCell>
       {task.tasks.map(dayTask => (
-        <StyledTableHeaderCell key={dayTask.taskID}>
-          {dayTask.type}
-        </StyledTableHeaderCell>
+        <StyledTableCell key={dayTask.taskID}>{dayTask.type}</StyledTableCell>
       ))}
     </TableRow>
   );

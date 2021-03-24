@@ -9,10 +9,11 @@ import {
 } from '@material-ui/core';
 import {
   StyledTableContainer,
-  StyledTableHeaderCell,
+  StyledTableCell,
 } from '../../styled-components/StyledTable';
-import TaskRow from './TaskRow';
-import RowActions from '../common/RowActions';
+import TaskRow from './task-row/TaskRow';
+import { selectionModeEnum } from '../App';
+import RowActions from '../../common/RowActions';
 
 const useStyles = makeStyles({
   actionCell: {
@@ -35,24 +36,26 @@ const TasksTable = ({
   data,
   selectedId,
   onSelect,
-  isDriverSelected,
+  selectionMode,
   getDriverName,
   removeDriverFromTask,
 }) => {
   const classes = useStyles();
+  const buttonText =
+    selectionMode === selectionModeEnum.noneChosen ? 'Driver' : 'Pair';
 
   return (
     <StyledTableContainer component={Paper}>
       <Table stickyHeader>
         <TableHead>
           <TableRow>
-            <StyledTableHeaderCell className={classes.actionCell}>
+            <StyledTableCell className={classes.actionCell}>
               Driver
-            </StyledTableHeaderCell>
+            </StyledTableCell>
             {columns.map(column => (
-              <StyledTableHeaderCell key={column.label}>
+              <StyledTableCell key={column.label}>
                 {column.label}
-              </StyledTableHeaderCell>
+              </StyledTableCell>
             ))}
           </TableRow>
         </TableHead>
@@ -61,14 +64,13 @@ const TasksTable = ({
             <TaskRow
               key={task.lineId}
               task={task}
-              isSelected={selectedId === task.lineId && !isDriverSelected}
               getDriverName={getDriverName}
               removeDriverFromTask={removeDriverFromTask}
             >
               <RowActions
-                isRowSelected={selectedId === task.lineId}
-                isActionAvailable={!selectedId}
-                buttonText={isDriverSelected ? 'Pair' : 'Driver'}
+                tableChosen={selectionMode === selectionModeEnum.taskChosen}
+                buttonText={buttonText}
+                isSelected={selectedId === task.lineId}
                 onSelect={() => onSelect(task.lineId)}
                 onDeselect={() => onSelect(null)}
               />

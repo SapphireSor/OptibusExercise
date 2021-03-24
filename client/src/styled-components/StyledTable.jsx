@@ -7,7 +7,7 @@ export const StyledTableContainer = withStyles({
   },
 })(TableContainer);
 
-export const StyledTableHeaderCell = withStyles({
+export const StyledTableCell = withStyles({
   root: {
     padding: '10px',
   },
